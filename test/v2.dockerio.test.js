@@ -298,6 +298,22 @@ test('v2 docker.io', function (tt) {
         });
     });
 
+    tt.test('getManifest (v2 single-platform)', function (t) {
+        var opts = {
+            ref: 'latest',
+            architecture: 'amd64',
+            os: 'linux',
+            maxSchemaVersion: 2
+        };
+        client.getManifestForPlatform(opts, function (err, manifest) {
+            t.error(err, 'no error');
+            t.ok(manifest, 'got manifest');
+            t.equal(manifest.schemaVersion, 2, 'schemaVersion is 2');
+            t.ok(manifest.config, 'has config');
+            t.ok(Array.isArray(manifest.layers), 'has layers array');
+            t.end();
+        });
+    });
 
     tt.test('  headBlob', function (t) {
         var digest = getFirstLayerDigestFromManifest(manifest);
